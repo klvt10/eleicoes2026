@@ -1,5 +1,5 @@
 # dados brutos e derivados grandes (TSE: bweb, parquet, perfil…) — 56 GB, regenerados pelos scripts
-dados/
+/dados/
 .venv/
 logs/
 __pycache__/

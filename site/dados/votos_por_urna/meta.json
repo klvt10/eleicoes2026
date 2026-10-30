@@ -1,0 +1,87 @@
+{
+ "gerado": "2026-10-30T18:42",
+ "lim_lista": 10,
+ "cols_hist": [
+  "k",
+  "n",
+  "outro",
+  "comp",
+  "aptos",
+  "bn",
+  "biom",
+  "eu_cruz",
+  "outro_cruz",
+  "comp_cruz",
+  "n_cruz"
+ ],
+ "cols_urna": [
+  "uf",
+  "mun",
+  "zona",
+  "secao",
+  "local",
+  "agreg",
+  "aptos",
+  "comp",
+  "v13",
+  "v22",
+  "bn",
+  "biom",
+  "c13",
+  "c22",
+  "ccomp"
+ ],
+ "turnos": {
+  "2026_t2": {
+   "nome": "2º turno de 2026",
+   "curto": "2T 2026",
+   "data": "25/10/2026",
+   "cands": {
+    "13": "Lula",
+    "22": "Flávio"
+   },
+   "cruz": "1º turno de 2026",
+   "cruz_curto": "1T 2026",
+   "urnas": 499205,
+   "comp": 128236074,
+   "v13": 64256232,
+   "v22": 59826041,
+   "bn": 4153801,
+   "urnas_com_cruz": 499205
+  },
+  "2026_t1": {
+   "nome": "1º turno de 2026",
+   "curto": "1T 2026",
+   "data": "04/10/2026",
+   "cands": {
+    "13": "Lula",
+    "22": "Flávio"
+   },
+   "cruz": "2º turno de 2026",
+   "cruz_curto": "2T 2026",
+   "urnas": 499206,
+   "comp": 125275835,
+   "v13": 53879538,
+   "v22": 56104503,
+   "bn": 5969801,
+   "urnas_com_cruz": 499205
+  },
+  "2022_t2": {
+   "nome": "2º turno de 2022",
+   "curto": "2T 2022",
+   "data": "30/10/2022",
+   "cands": {
+    "13": "Lula",
+    "22": "Bolsonaro"
+   },
+   "cruz": "1º turno de 2022",
+   "cruz_curto": "1T 2022",
+   "urnas": 472027,
+   "comp": 124252796,
+   "v13": 60345999,
+   "v22": 58206354,
+   "bn": 5700443,
+   "urnas_com_cruz": 472027
+  }
+ }
+}
