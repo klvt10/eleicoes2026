@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Presidente × governador, senador e deputados · 2026</title>
+<meta name="description" content="Comparativo, por estado e por cidade, entre o voto para presidente e o voto para governador, senador e deputados no 1º turno de 2026, com as discrepâncias.">
+<link rel="icon" href="icone.svg" type="image/svg+xml">
+<link rel="stylesheet" href="app.css?v=20261029140908">
+<link rel="stylesheet" href="cards.css?v=20261029140908">
+<style>
+.comp { flex: 1; display: flex; flex-direction: column; gap: 12px; padding: 12px 16px 32px; background: var(--painel); }
+.comp .vis { display: inline-flex; flex-wrap: wrap; gap: 4px; }
+.filtros-linha { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: flex-end; }
+.filtros-linha label { display: flex; flex-direction: column; gap: 3px; font-size: 12px; color: var(--muted); }
+.filtros-linha select, .filtros-linha input { font: inherit; font-size: 14px; color: var(--fg); background: var(--bg); border: 1px solid var(--linha); border-radius: 6px; padding: 5px 8px; min-width: 120px; }
+.cartao .v.pos { color: var(--lula); } .cartao .v.neg { color: var(--flavio); }
+table.grande td.pos { color: var(--lula); font-weight: 600; } table.grande td.neg { color: var(--flavio); font-weight: 600; }
+table.grande td.fraco { color: var(--muted); }
+table.grande thead th { cursor: pointer; user-select: none; }
+table.grande thead th:hover { color: var(--fg); text-decoration: underline; }
+table.grande thead th.ord { color: var(--fg); }
+table.grande thead th.ord::after { content: " ▾"; } table.grande thead th.ord.asc::after { content: " ▴"; }
+table.grande td.txt { text-align: left; max-width: 240px; overflow: hidden; text-overflow: ellipsis; }
+.tab-rolagem { overflow: auto; max-height: calc(100vh - 290px); border: 1px solid var(--linha); border-radius: var(--raio); }
+.grafico-box { position: relative; border: 1px solid var(--linha); border-radius: var(--raio); padding: 10px 12px; background: var(--bg); }
+.grafico-box svg { max-width: 100%; height: auto; display: block; }
+body.so-grafico { height: 100vh; overflow: hidden; } body.so-grafico .comp { overflow: hidden; } body.so-grafico #sec-grafico { display: flex; flex-direction: column; min-height: 0; gap: 6px; } body.so-grafico .grafico-box { flex: 1; min-height: 0; padding: 6px 8px; } body.so-grafico #nota-grafico { display: none; }
+.grafico-box svg text { font-size: 11px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+.grafico-box svg .eixo { stroke: var(--linha); }
+.grafico-box svg .grade { stroke: var(--linha); stroke-dasharray: 2 3; }
+.grafico-box svg .ident { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 4 4; }
+.grafico-box svg .media { stroke: var(--fg); stroke-width: 1.5; }
+.grafico-box svg circle { stroke: var(--painel); stroke-width: .8; cursor: pointer; }
+.grafico-box svg circle:hover { stroke: var(--fg); stroke-width: 1.5; }
+.tip { position: absolute; pointer-events: none; z-index: 5; background: var(--painel); color: var(--fg); border: 1px solid var(--linha); border-radius: 6px; padding: 7px 10px; font-size: 12.5px; box-shadow: 0 4px 14px rgba(0,0,0,.18); max-width: 280px; line-height: 1.4; }
+.legenda-g { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12.5px; color: var(--muted); }
+.legenda-g span::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; background: var(--c); }
+.nota { font-size: 12.5px; color: var(--muted); margin: 0; max-width: 1000px; line-height: 1.45; }
+.gov-lista { font-size: 12.5px; color: var(--muted); display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 4px 14px; }
+.gov-lista b { color: var(--fg); font-weight: 600; }
+.campo-l { color: var(--lula); } .campo-f { color: var(--flavio); }
+@media (max-width: 860px) { .comp { padding: 10px 12px 28px; } .tab-rolagem { max-height: 70vh; } .topo-acoes { flex-wrap: wrap; } }
+</style>
+</head>
+<body>
+<header class="topo">
+  <div class="marca">
+    <h1>Presidente × governador, senador e deputados</h1>
+    <p>1º turno de 2026 · como o voto em Lula se compara, estado a estado e cidade a cidade, com o voto para governador, senador e deputado</p>
+  </div>
+  <div class="topo-acoes">
+    <div class="vis" role="group" aria-label="Visualização"><button type="button" id="vis-estados">Estados</button><button type="button" id="vis-cidades">Cidades</button><button type="button" id="vis-grafico">Gráfico</button></div>
+    <a class="link" href="votos-por-urna.html">Votos por urna</a>
+    <a class="link" href="modelo.html">Modelo de previsão</a>
+    <a class="link" href="index.html">Mapa de transferências</a>
+    <button type="button" class="link" id="abrir-metodo">Como ler</button>
+  </div>
+</header>
+
+<main class="comp">
+  <div class="cartoes" id="cartoes"></div>
+  <div class="filtros-linha" id="filtros">
+    <label>Referência<select id="sel-ref"></select></label>
+    <label id="lbl-uf">Estado<select id="sel-uf"></select></label>
+    <label id="lbl-min">Mínimo<select id="sel-min"></select></label>
+    <label id="lbl-n">Mostrar<select id="sel-n"></select></label>
+    <label id="lbl-busca">Buscar<input type="search" id="busca" placeholder="cidade" aria-label="Buscar cidade"></label>
+  </div>
+
+  <section id="sec-estados" hidden>
+    <div class="placar-cab"><h2 class="placar-tit">Estados</h2></div>
+    <div class="tab-rolagem"><table class="grande" id="tab-estados"></table></div>
+    <p class="nota" id="nota-estados"></p>
+  </section>
+
+  <section id="sec-cidades" hidden>
+    <div class="placar-cab"><h2 class="placar-tit" id="tit-cidades">Cidades</h2></div>
+    <div class="tab-rolagem"><table class="grande" id="tab-cidades"></table></div>
+    <p class="nota" id="nota-cidades"></p>
+  </section>
+
+  <section id="sec-grafico" hidden>
+    <div class="placar-cab"><h2 class="placar-tit" id="tit-grafico">Gráfico</h2></div>
+    <div class="legenda-g"><span style="--c:var(--lula)">Cidade acima do padrão do estado (mais Lula do que a referência sugere)</span><span style="--c:var(--flavio)">Abaixo do padrão</span><span style="--c:var(--neutro)">Dentro de 5 pontos</span></div>
+    <div class="grafico-box" id="grafico"></div>
+    <p class="nota" id="nota-grafico"></p>
+  </section>
+</main>
+
+<dialog id="card-uf" class="card" aria-labelledby="card-uf-cab">
+  <header class="card-cab" id="card-uf-cab"></header>
+  <div class="card-corpo" id="card-uf-corpo"></div>
+  <footer class="card-rodape" id="card-uf-rodape"></footer>
+</dialog>
+
+<dialog id="metodo">
+  <h2>Como ler</h2>
+  <p>Todos os números são do <b>1º turno de 2026</b>, votos válidos (nominais e de legenda) de cada cargo na mesma cidade, a partir dos boletins de urna do TSE. A coluna Lula 2º turno usa só os votos de Lula e Flávio.</p>
+  <h3>Governador e senador por campo</h3>
+  <p>Cada candidato a governador e a senador foi classificado pela coligação: <b>campo Lula</b> quando a coligação inclui o PT (ou o partido é PSOL, REDE, UP, PSTU, PCB ou PCO); <b>campo Flávio</b> quando inclui o PL (ou o partido é o NOVO); <b>outro</b> quando não tem nenhum dos dois, como Cleitinho em Minas, Raquel Lyra em Pernambuco ou Daniel Vilela em Goiás. A lista completa por estado está abaixo da tabela de estados. Em 2026 cada eleitor tem dois votos para senador; a base é a soma dos votos válidos.</p>
+  <h3>Deputados por bloco</h3>
+  <p>O voto para deputado federal e estadual é somado pelo partido do candidato (ou da legenda) em três blocos. <b>Esquerda</b>: PT, PCdoB, PV, PSOL, REDE, PSB, PDT, PCB, PSTU, PCO, UP. <b>Centro</b>: MDB, PSD, PSDB, Cidadania, Podemos, Avante, Solidariedade, Democrata, Agir, Mobiliza, PRD. <b>Direita</b>: PL, PP, Republicanos, União, Novo, PRTB, DC, Missão. A classificação é editorial e está no script.</p>
+  <h3>Discrepância</h3>
+  <p>Para cada cidade: <b>Lula − referência</b> = % de Lula no 1º turno menos a referência escolhida (campo Lula no governo ou no senado, esquerda nos deputados, ou o PT nos deputados). Como essa diferença é naturalmente grande (Lula tem votos de eleitores de partidos de centro), o que importa é o <b>desvio em relação ao estado</b>: a diferença da cidade menos a diferença do estado inteiro. Desvio positivo = a cidade deu a Lula mais do que o resto do estado, dado o seu voto nos outros cargos. Cidades pequenas oscilam mais; use o mínimo de votos.</p>
+  <p>Um desvio grande não é prova de nada por si só: cacique local, candidato da cidade a governador ou deputado e campanhas locais produzem exatamente isso. Serve para apontar onde olhar.</p>
+  <form method="dialog"><button>Fechar</button></form>
+</dialog>
+
+<script src="cards.js?v=20261029140908"></script>
+<script src="comparativo.js?v=20261029140908"></script>
+</body>
+</html>

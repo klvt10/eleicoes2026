@@ -1,0 +1,32 @@
+/* Estilos dos cards de estado e cidade (diálogo #card-uf), usados por comparativo.html e modelo.html */
+#card-uf .card-corpo { display: flex; flex-direction: column; gap: 12px; }
+#card-uf .card-rodape { display: flex; gap: 8px; padding: 10px 22px 14px; border-top: 1px solid var(--linha); flex-wrap: wrap; }
+.selo { display: flex; flex-direction: column; align-items: center; padding: 6px 14px; border-radius: var(--raio); font-size: 11px; line-height: 1.25; white-space: nowrap; }
+.selo b { font-size: 17px; }
+.selo.venc-l { background: color-mix(in srgb, var(--lula) 18%, var(--painel)); color: var(--lula); }
+.selo.venc-f { background: color-mix(in srgb, var(--flavio) 18%, var(--painel)); color: var(--flavio); }
+.sec-tit { margin: 0 0 4px; font-size: 14px; }
+.pres-rol { overflow-x: auto; min-width: 0; }
+table.pres { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-numeric: tabular-nums; }
+table.pres th, table.pres td { padding: 4px 8px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--linha); }
+table.pres th { font-size: 11px; color: var(--muted); font-weight: 600; }
+table.pres .esq { text-align: left; }
+table.pres td.muted { color: var(--muted); }
+table.pres td.pos { color: var(--lula); } table.pres td.neg { color: var(--flavio); }
+table.pres tr.cand-l td.esq { color: var(--lula); font-weight: 600; } table.pres tr.cand-f td.esq { color: var(--flavio); font-weight: 600; }
+table.pres tr.total td { font-weight: 600; border-top: 2px solid var(--linha); }
+table.pres tr.liq td { font-weight: 700; background: var(--hover); }
+table.pres tr.sub td.esq { padding-left: 22px; }
+.liq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 20px; }
+@media (max-width: 860px) { .liq-grid { grid-template-columns: 1fr; } }
+table.cargos { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-numeric: tabular-nums; }
+table.cargos th, table.cargos td { padding: 5px 8px; text-align: right; border-bottom: 1px solid var(--linha); white-space: nowrap; }
+table.cargos th { font-size: 11px; color: var(--muted); font-weight: 600; }
+table.cargos th.esq, table.cargos td.esq { text-align: left; }
+table.cargos td.l { color: var(--lula); font-weight: 600; } table.cargos td.f { color: var(--flavio); font-weight: 600; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { display: inline-flex; align-items: baseline; gap: 6px; padding: 3px 9px; border-radius: 999px; font-size: 12.5px; border: 1px solid var(--linha); background: color-mix(in srgb, var(--c, var(--neutro)) 14%, var(--painel)); }
+.chip b { font-variant-numeric: tabular-nums; }
+.chip.l { --c: var(--lula); } .chip.f { --c: var(--flavio); }
+.chips-tit { font-size: 12px; color: var(--muted); margin: 0 0 4px; }
+.card-uf-nota { font-size: 12px; color: var(--muted); margin: 0; }

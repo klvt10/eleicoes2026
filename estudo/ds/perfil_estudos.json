@@ -1,0 +1,513 @@
+{
+ "tvd": [
+  {
+   "ano_ant": 2022,
+   "ref": "mesma seção",
+   "count": 487767.0,
+   "10%": 0.119,
+   "50%": 0.16,
+   "90%": 0.256
+  },
+  {
+   "ano_ant": 2022,
+   "ref": "outra seção do mesmo local",
+   "count": 473514.0,
+   "10%": 0.178,
+   "50%": 0.243,
+   "90%": 0.395
+  },
+  {
+   "ano_ant": 2022,
+   "ref": "seção qualquer do município",
+   "count": 511130.0,
+   "10%": 0.231,
+   "50%": 0.353,
+   "90%": 0.535
+  },
+  {
+   "ano_ant": 2024,
+   "ref": "mesma seção",
+   "count": 498236.0,
+   "10%": 0.073,
+   "50%": 0.098,
+   "90%": 0.155
+  },
+  {
+   "ano_ant": 2024,
+   "ref": "outra seção do mesmo local",
+   "count": 480596.0,
+   "10%": 0.161,
+   "50%": 0.22,
+   "90%": 0.379
+  },
+  {
+   "ano_ant": 2024,
+   "ref": "seção qualquer do município",
+   "count": 501552.0,
+   "10%": 0.223,
+   "50%": 0.347,
+   "90%": 0.53
+  }
+ ],
+ "decis": [
+  {
+   "var": "% mulheres",
+   "decil": 1,
+   "x": 44.74,
+   "virada": 2.446
+  },
+  {
+   "var": "% mulheres",
+   "decil": 2,
+   "x": 48.13,
+   "virada": 2.732
+  },
+  {
+   "var": "% mulheres",
+   "decil": 3,
+   "x": 49.77,
+   "virada": 2.879
+  },
+  {
+   "var": "% mulheres",
+   "decil": 4,
+   "x": 51.03,
+   "virada": 3.019
+  },
+  {
+   "var": "% mulheres",
+   "decil": 5,
+   "x": 52.14,
+   "virada": 3.114
+  },
+  {
+   "var": "% mulheres",
+   "decil": 6,
+   "x": 53.2,
+   "virada": 3.182
+  },
+  {
+   "var": "% mulheres",
+   "decil": 7,
+   "x": 54.28,
+   "virada": 3.216
+  },
+  {
+   "var": "% mulheres",
+   "decil": 8,
+   "x": 55.49,
+   "virada": 3.229
+  },
+  {
+   "var": "% mulheres",
+   "decil": 9,
+   "x": 57.04,
+   "virada": 3.242
+  },
+  {
+   "var": "% mulheres",
+   "decil": 10,
+   "x": 60.56,
+   "virada": 3.223
+  },
+  {
+   "var": "% 16-17 anos",
+   "decil": 1,
+   "x": 0.0,
+   "virada": 3.254
+  },
+  {
+   "var": "% 16-17 anos",
+   "decil": 2,
+   "x": 0.0,
+   "virada": 3.262
+  },
+  {
+   "var": "% 16-17 anos",
+   "decil": 3,
+   "x": 0.06,
+   "virada": 3.256
+  },
+  {
+   "var": "% 16-17 anos",
+   "decil": 4,
+   "x": 0.3,
+   "virada": 3.415
+  },
+  {
+   "var": "% 16-17 anos",
+   "decil": 5,
+   "x": 0.5,
+   "virada": 3.206
+  },
+  {
+   "var": "% 16-17 anos",
+   "decil": 6,
+   "x": 0.71,
+   "virada": 3.15
+  },
+  {
+   "var": "% 16-17 anos",
+   "decil": 7,
+   "x": 0.97,
+   "virada": 3.054
+  },
+  {
+   "var": "% 16-17 anos",
+   "decil": 8,
+   "x": 1.34,
+   "virada": 2.852
+  },
+  {
+   "var": "% 16-17 anos",
+   "decil": 9,
+   "x": 1.95,
+   "virada": 2.489
+  },
+  {
+   "var": "% 16-17 anos",
+   "decil": 10,
+   "x": 4.53,
+   "virada": 2.33
+  },
+  {
+   "var": "% 18-29 anos",
+   "decil": 1,
+   "x": 6.86,
+   "virada": 2.739
+  },
+  {
+   "var": "% 18-29 anos",
+   "decil": 2,
+   "x": 11.14,
+   "virada": 2.935
+  },
+  {
+   "var": "% 18-29 anos",
+   "decil": 3,
+   "x": 13.42,
+   "virada": 3.021
+  },
+  {
+   "var": "% 18-29 anos",
+   "decil": 4,
+   "x": 15.28,
+   "virada": 3.059
+  },
+  {
+   "var": "% 18-29 anos",
+   "decil": 5,
+   "x": 17.02,
+   "virada": 3.062
+  },
+  {
+   "var": "% 18-29 anos",
+   "decil": 6,
+   "x": 18.86,
+   "virada": 3.034
+  },
+  {
+   "var": "% 18-29 anos",
+   "decil": 7,
+   "x": 20.99,
+   "virada": 3.006
+  },
+  {
+   "var": "% 18-29 anos",
+   "decil": 8,
+   "x": 23.89,
+   "virada": 2.951
+  },
+  {
+   "var": "% 18-29 anos",
+   "decil": 9,
+   "x": 29.56,
+   "virada": 2.959
+  },
+  {
+   "var": "% 18-29 anos",
+   "decil": 10,
+   "x": 47.29,
+   "virada": 3.625
+  },
+  {
+   "var": "% 60+ anos",
+   "decil": 1,
+   "x": 7.74,
+   "virada": 3.562
+  },
+  {
+   "var": "% 60+ anos",
+   "decil": 2,
+   "x": 11.93,
+   "virada": 3.375
+  },
+  {
+   "var": "% 60+ anos",
+   "decil": 3,
+   "x": 14.64,
+   "virada": 3.254
+  },
+  {
+   "var": "% 60+ anos",
+   "decil": 4,
+   "x": 17.24,
+   "virada": 3.156
+  },
+  {
+   "var": "% 60+ anos",
+   "decil": 5,
+   "x": 20.08,
+   "virada": 2.979
+  },
+  {
+   "var": "% 60+ anos",
+   "decil": 6,
+   "x": 23.39,
+   "virada": 2.79
+  },
+  {
+   "var": "% 60+ anos",
+   "decil": 7,
+   "x": 27.2,
+   "virada": 2.68
+  },
+  {
+   "var": "% 60+ anos",
+   "decil": 8,
+   "x": 31.55,
+   "virada": 2.746
+  },
+  {
+   "var": "% 60+ anos",
+   "decil": 9,
+   "x": 36.98,
+   "virada": 2.86
+  },
+  {
+   "var": "% 60+ anos",
+   "decil": 10,
+   "x": 47.73,
+   "virada": 2.968
+  },
+  {
+   "var": "% até fundamental incompleto",
+   "decil": 1,
+   "x": 7.84,
+   "virada": 2.83
+  },
+  {
+   "var": "% até fundamental incompleto",
+   "decil": 2,
+   "x": 15.53,
+   "virada": 3.506
+  },
+  {
+   "var": "% até fundamental incompleto",
+   "decil": 3,
+   "x": 20.38,
+   "virada": 3.574
+  },
+  {
+   "var": "% até fundamental incompleto",
+   "decil": 4,
+   "x": 24.62,
+   "virada": 3.555
+  },
+  {
+   "var": "% até fundamental incompleto",
+   "decil": 5,
+   "x": 28.76,
+   "virada": 3.447
+  },
+  {
+   "var": "% até fundamental incompleto",
+   "decil": 6,
+   "x": 33.15,
+   "virada": 3.289
+  },
+  {
+   "var": "% até fundamental incompleto",
+   "decil": 7,
+   "x": 38.04,
+   "virada": 3.071
+  },
+  {
+   "var": "% até fundamental incompleto",
+   "decil": 8,
+   "x": 43.7,
+   "virada": 2.783
+  },
+  {
+   "var": "% até fundamental incompleto",
+   "decil": 9,
+   "x": 50.67,
+   "virada": 2.336
+  },
+  {
+   "var": "% até fundamental incompleto",
+   "decil": 10,
+   "x": 62.13,
+   "virada": 1.7
+  },
+  {
+   "var": "% superior completo",
+   "decil": 1,
+   "x": 1.15,
+   "virada": 2.679
+  },
+  {
+   "var": "% superior completo",
+   "decil": 2,
+   "x": 2.53,
+   "virada": 3.0
+  },
+  {
+   "var": "% superior completo",
+   "decil": 3,
+   "x": 3.7,
+   "virada": 3.071
+  },
+  {
+   "var": "% superior completo",
+   "decil": 4,
+   "x": 4.87,
+   "virada": 3.105
+  },
+  {
+   "var": "% superior completo",
+   "decil": 5,
+   "x": 6.18,
+   "virada": 3.138
+  },
+  {
+   "var": "% superior completo",
+   "decil": 6,
+   "x": 7.75,
+   "virada": 3.153
+  },
+  {
+   "var": "% superior completo",
+   "decil": 7,
+   "x": 9.78,
+   "virada": 3.21
+  },
+  {
+   "var": "% superior completo",
+   "decil": 8,
+   "x": 12.74,
+   "virada": 3.236
+  },
+  {
+   "var": "% superior completo",
+   "decil": 9,
+   "x": 18.09,
+   "virada": 3.204
+  },
+  {
+   "var": "% superior completo",
+   "decil": 10,
+   "x": 34.66,
+   "virada": 2.599
+  },
+  {
+   "var": "Lula no 1º turno (%)",
+   "decil": 1,
+   "x": 21.92,
+   "virada": 3.503
+  },
+  {
+   "var": "Lula no 1º turno (%)",
+   "decil": 2,
+   "x": 30.26,
+   "virada": 3.907
+  },
+  {
+   "var": "Lula no 1º turno (%)",
+   "decil": 3,
+   "x": 35.37,
+   "virada": 3.906
+  },
+  {
+   "var": "Lula no 1º turno (%)",
+   "decil": 4,
+   "x": 39.83,
+   "virada": 3.778
+  },
+  {
+   "var": "Lula no 1º turno (%)",
+   "decil": 5,
+   "x": 44.23,
+   "virada": 3.54
+  },
+  {
+   "var": "Lula no 1º turno (%)",
+   "decil": 6,
+   "x": 49.12,
+   "virada": 3.263
+  },
+  {
+   "var": "Lula no 1º turno (%)",
+   "decil": 7,
+   "x": 54.88,
+   "virada": 2.93
+  },
+  {
+   "var": "Lula no 1º turno (%)",
+   "decil": 8,
+   "x": 61.6,
+   "virada": 2.479
+  },
+  {
+   "var": "Lula no 1º turno (%)",
+   "decil": 9,
+   "x": 70.11,
+   "virada": 1.881
+  },
+  {
+   "var": "Lula no 1º turno (%)",
+   "decil": 10,
+   "x": 82.28,
+   "virada": 0.893
+  }
+ ],
+ "regressao": [
+  {
+   "var": "% mulheres",
+   "coef_por_pp": 0.0357,
+   "efeito_1dp": 0.161
+  },
+  {
+   "var": "% 16-17 anos",
+   "coef_por_pp": 0.0021,
+   "efeito_1dp": 0.004
+  },
+  {
+   "var": "% 18-29 anos",
+   "coef_por_pp": 0.0251,
+   "efeito_1dp": 0.282
+  },
+  {
+   "var": "% 60+ anos",
+   "coef_por_pp": -0.0146,
+   "efeito_1dp": -0.174
+  },
+  {
+   "var": "% até fundamental incompleto",
+   "coef_por_pp": 0.0194,
+   "efeito_1dp": 0.311
+  },
+  {
+   "var": "% superior completo",
+   "coef_por_pp": -0.043,
+   "efeito_1dp": -0.431
+  },
+  {
+   "var": "Lula no 1º turno (%)",
+   "coef_por_pp": -0.094,
+   "efeito_1dp": -1.688
+  }
+ ],
+ "r2_intra_municipio": 0.14,
+ "n_secoes": 429094
+}

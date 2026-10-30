@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Votos por urna · 2026</title>
+<meta name="description" content="Em quantas urnas cada candidato a presidente teve zero, até 5 ou até N votos no 1º e no 2º turno de 2026, quanto o outro teve nessas urnas e como as mesmas urnas votaram no outro turno. Filtros por região, estado e número de votos.">
+<link rel="icon" href="icone.svg" type="image/svg+xml">
+<link rel="stylesheet" href="app.css?v=20261029140908">
+<style>
+.comp { flex: 1; display: flex; flex-direction: column; gap: 14px; padding: 12px 16px 32px; background: var(--painel); min-width: 0; overflow-x: hidden; }
+.frase, .nota { overflow-wrap: anywhere; }
+.vis button { white-space: nowrap; } .vis button:hover { background: var(--hover); } .vis button[aria-pressed="true"]:hover { background: var(--fg); }
+#atalhos { align-self: flex-start; }
+.filtros-linha { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: flex-end; }
+.filtros-linha label { display: flex; flex-direction: column; gap: 3px; font-size: 12px; color: var(--muted); }
+.filtros-linha select, .filtros-linha input { font: inherit; font-size: 14px; color: var(--fg); background: var(--bg); border: 1px solid var(--linha); border-radius: 6px; padding: 5px 8px; min-width: 110px; width: auto; }
+.filtros-linha input[type=number] { width: 90px; min-width: 0; }
+.frase { font-size: 15px; margin: 0; line-height: 1.5; max-width: 1000px; }
+.frase b { font-weight: 700; font-variant-numeric: tabular-nums; }
+.l { color: var(--lula); } .f { color: var(--flavio); }
+.painel-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 12px; min-width: 0; }
+.bloco { min-width: 0; border: 1px solid var(--linha); border-radius: var(--raio); padding: 12px 14px; background: var(--bg); display: flex; flex-direction: column; gap: 8px; }
+.bloco h3 { margin: 0; font-size: 14px; font-weight: 600; }
+.bloco .grande-n { font-size: 30px; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.bloco .sub { font-size: 12px; color: var(--muted); }
+table.kv { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-numeric: tabular-nums; }
+table.kv td { padding: 4px 0; border-bottom: 1px solid var(--linha); }
+table.kv td:last-child { text-align: right; font-weight: 600; padding-left: 10px; }
+table.kv tr.sep td { border-top: 2px solid var(--linha); padding-top: 7px; }
+table.kv td.k { color: var(--muted); font-weight: 400; }
+.placar-cab { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.placar-tit { margin: 0; font-size: 15px; }
+.tab-rolagem { overflow: auto; max-height: 70vh; border: 1px solid var(--linha); border-radius: var(--raio); }
+table.grande tbody tr { cursor: default; }
+table.grande thead th { cursor: pointer; user-select: none; }
+table.grande thead th.ord::after { content: " ▾"; } table.grande thead th.ord.asc::after { content: " ▴"; }
+table.grande td.l { color: var(--lula); font-weight: 600; } table.grande td.f { color: var(--flavio); font-weight: 600; }
+table.grande td.txt { text-align: left; max-width: 220px; overflow: hidden; text-overflow: ellipsis; }
+table.grande td.fraco, table.grande th.fraco { color: var(--muted); }
+table.grande td.zero { background: color-mix(in srgb, var(--linha) 60%, var(--painel)); }
+.grafico-box { position: relative; border: 1px solid var(--linha); border-radius: var(--raio); padding: 10px 12px; background: var(--bg); }
+.grafico-box svg { max-width: 100%; height: auto; display: block; }
+.grafico-box svg text { font-size: 11px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+.grafico-box svg .eixo { stroke: var(--linha); } .grafico-box svg .grade { stroke: var(--linha); stroke-dasharray: 2 3; }
+.grafico-box svg rect.b { cursor: pointer; } .grafico-box svg rect.b:hover { opacity: .75; }
+.grafico-box svg rect.fora { opacity: .3; }
+.tip { position: absolute; pointer-events: none; z-index: 5; background: var(--painel); color: var(--fg); border: 1px solid var(--linha); border-radius: 6px; padding: 7px 10px; font-size: 12.5px; box-shadow: 0 4px 14px rgba(0,0,0,.18); max-width: 300px; line-height: 1.4; }
+.legenda-g { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12.5px; color: var(--muted); align-items: center; }
+.legenda-g span::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; background: var(--c); }
+.nota { font-size: 12.5px; color: var(--muted); margin: 0; max-width: 1000px; line-height: 1.45; }
+.aviso-topo { font-size: 13px; color: var(--muted); }
+@media (max-width: 860px) { .comp { padding: 10px 12px 28px; } .topo-acoes { flex-wrap: wrap; } .bloco .grande-n { font-size: 24px; } }
+</style>
+</head>
+<body>
+<header class="topo">
+  <div class="marca">
+    <h1>Votos por urna</h1>
+    <p>Em quantas urnas cada candidato teve zero (ou poucos) votos, quanto o outro teve nessas urnas e como elas votaram no outro turno</p>
+  </div>
+  <div class="topo-acoes">
+    <div class="vis" role="group" aria-label="Turno" id="turnos"></div>
+    <a class="link" href="comparativo.html">Presidente × outros cargos</a>
+    <a class="link" href="index.html">Mapa de transferências</a>
+    <button type="button" class="link" id="abrir-metodo">Como ler</button>
+  </div>
+</header>
+
+<main class="comp">
+  <div class="filtros-linha" id="filtros">
+    <label>Região<select id="sel-reg"></select></label>
+    <label>Estado<select id="sel-uf"></select></label>
+    <label>Condição<select id="sel-op"><option value="le">até</option><option value="ge">pelo menos</option><option value="eq">exatamente</option></select></label>
+    <label>Votos por urna<input type="number" id="in-n" min="0" max="600" step="1" value="0" inputmode="numeric"></label>
+    <label>Atalhos<span class="vis" id="atalhos"></span></label>
+  </div>
+  <p class="frase" id="frase"></p>
+
+  <div class="painel-2" id="painel"></div>
+
+  <section id="sec-grafico">
+    <div class="placar-cab"><h2 class="placar-tit" id="tit-grafico">Quantas urnas por número de votos do candidato</h2>
+      <div class="legenda-g" id="legenda-g"></div></div>
+    <div class="grafico-box" id="grafico"></div>
+    <p class="nota" id="nota-grafico"></p>
+  </section>
+
+  <section id="sec-estados">
+    <div class="placar-cab"><h2 class="placar-tit" id="tit-estados">Por estado</h2></div>
+    <div class="tab-rolagem"><table class="grande" id="tab-estados"></table></div>
+    <p class="nota" id="nota-estados"></p>
+  </section>
+
+  <section id="sec-urnas">
+    <div class="placar-cab"><h2 class="placar-tit" id="tit-urnas">Urnas</h2>
+      <label class="mini" style="font-size:12px;color:var(--muted)">Mostrar <select id="sel-n"><option>50</option><option>200</option><option>1000</option><option value="0">todas</option></select></label></div>
+    <div class="tab-rolagem"><table class="grande" id="tab-urnas"></table></div>
+    <p class="nota" id="nota-urnas"></p>
+  </section>
+</main>
+
+<dialog id="metodo">
+  <h2>Como ler</h2>
+  <p>Fonte: boletins de urna (bweb) do TSE, votos para presidente. Cada linha do boletim por seção é <b>uma urna</b>. Quando seções foram agregadas, a urna principal já traz os votos somados de todas; a coluna "agregadas" da lista indica isso.</p>
+  <h3>A condição</h3>
+  <p>A mesma condição é aplicada aos dois candidatos. <b>"até 0"</b> = urnas em que o candidato teve zero votos; <b>"até 5"</b> = cinco ou menos; <b>"pelo menos 200"</b> = duzentos ou mais; <b>"exatamente N"</b>. Para cada candidato aparece quantas urnas satisfazem a condição e, <b>nessas urnas</b>, quantos votos ele teve, quantos o adversário teve, o comparecimento, os brancos e nulos e os eleitores aptos.</p>
+  <h3>Outro turno nas mesmas urnas</h3>
+  <p>As urnas são casadas pela seção (UF, município, zona, seção). Para o 2º turno de 2026, mostra como as mesmas seções votaram no 1º turno (e vice-versa); para o 2º turno de 2022, o 1º turno de 2022. É o teste mais direto: uma urna em que um candidato teve zero votos no 2º turno mas dezenas no 1º seria estranha. Urnas sem par (seções novas ou extintas) ficam fora dessa linha.</p>
+  <h3>Lista de urnas</h3>
+  <p>A lista nominal só existe para urnas em que algum dos dois teve <b>até 10 votos</b>. Acima disso, use os totais e a tabela por estado.</p>
+  <p>Zero votos para um candidato numa urna com dezenas de eleitores não é anomalia por si só: acontece em comunidades pequenas, aldeias, assentamentos e seções no exterior, e aconteceu em 2022 também. O 2º turno de 2022 está aqui como linha de base.</p>
+  <form method="dialog"><button>Fechar</button></form>
+</dialog>
+
+<script src="votos-por-urna.js?v=20261029140908"></script>
+</body>
+</html>

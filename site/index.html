@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Transferências do 2º turno · 2026</title>
+<meta name="description" content="Mapa seção por seção de para onde foram os votos em disputa entre o 1º e o 2º turno da eleição presidencial de 2026.">
+<link rel="icon" href="icone.svg" type="image/svg+xml">
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+<link rel="stylesheet" href="app.css?v=20261029140908">
+</head>
+<body>
+<header class="topo">
+  <div class="marca">
+    <h1>Transferências do 2º turno</h1>
+    <p>Eleição presidencial 2026 · para onde foram, em cada seção, os votos que não eram de Lula nem de Flávio no 1º turno</p>
+  </div>
+  <div class="topo-acoes">
+    <div class="vis" role="group" aria-label="Visualização"><button type="button" id="vis-mapa">Mapa</button><button type="button" id="vis-tabela">Tabela</button><button type="button" id="vis-placar">Cidades por estado</button><button type="button" id="vis-destaques">Destaques</button><button type="button" id="vis-discrepancias">Discrepâncias</button><button type="button" id="vis-anomalias">Anomalias</button></div>
+    <a class="link" href="comparativo.html">Presidente × outros cargos</a>
+    <a class="link" href="votos-por-urna.html">Votos por urna</a>
+    <a class="link" href="modelo.html">Modelo de previsão</a>
+    <button type="button" class="link" id="abrir-metodo">Como ler</button>
+  </div>
+</header>
+
+<main class="app">
+  <div class="mapa-box"><div id="mapa" aria-label="Mapa"></div><p class="dica-mapa" id="dica-mapa" hidden>Use dois dedos para mover e aproximar o mapa</p></div>
+
+  <aside class="painel" id="painel">
+    <nav class="trilha" id="trilha" aria-label="Onde você está"></nav>
+
+    <div class="filtros">
+      <label>Estado<select id="sel-uf"></select></label>
+      <label>Cidade<select id="sel-cidade"></select></label>
+      <label class="largo" id="lbl-secao">Seção<select id="sel-secao"></select></label>
+    </div>
+
+    <section class="resumo" id="resumo" aria-live="polite"></section>
+
+    <section class="ranking" id="ranking">
+      <h2 id="rk-titulo">Ranking</h2>
+      <details id="rk-filtros" open><summary>Filtros e ordenação</summary>
+      <div class="filtros rk-filtros">
+        <label>Ranking de<select id="sel-rk"></select></label>
+        <label>Ordenar por<select id="sel-ord">
+          <option value="votos">Transferência líquida (votos)</option>
+          <option value="pct">% dos votos decididos para Lula</option>
+          <option value="mil">Saldo a cada 1000 votos líquidos</option>
+          <optgroup label="Comparação com 2022">
+            <option value="var_l">Lula 2º turno: 2026 − 2022</option>
+            <option value="var_pct">% dos decididos para Lula: 2026 − 2022</option>
+            <option value="pct22">% dos decididos para Lula em 2022</option>
+            <option value="l26">Lula no 2º turno 2026</option>
+          </optgroup>
+          <optgroup label="Municipais 2024">
+            <option value="i24">Índice municipal (vereador)</option>
+            <option value="bloco24">Vereador: esquerda − direita</option>
+            <option value="l26_i24">Lula 2026 acima do índice municipal</option>
+          </optgroup>
+        </select></label>
+        <label>Mínimo<select id="sel-min"></select></label>
+        <label>Mostrar
+          <select id="sel-n">
+            <option value="10">10 de cada lado</option>
+            <option value="25" selected>25 de cada lado</option>
+            <option value="50">50 de cada lado</option>
+            <option value="100">100 de cada lado</option>
+            <option value="0">todas</option>
+          </select>
+        </label>
+        <label class="largo">Categoria<select id="sel-cat">
+          <option value="">Todas</option>
+          <option value="lula_lula">Lula em 2022 e em 2026</option>
+          <option value="virou_lula">Virou para Lula em 2026</option>
+          <option value="virou_contra">Virou contra Lula em 2026</option>
+          <option value="direita_direita">Bolsonaro em 2022 e Flávio em 2026</option>
+        </select></label>
+        <label class="chk largo"><input type="checkbox" id="chk-inst"> incluir bases instáveis</label>
+      </div>
+      </details>
+      <p class="nota" id="rk-nota"></p>
+      <ol class="lista" id="lista"></ol>
+    </section>
+  </aside>
+</main>
+
+<section class="relatorio" id="anomalias" hidden><article class="rel" id="anom"><p class="carregando">Carregando o relatório…</p></article></section>
+
+<section class="tabela-vis" id="placar" hidden>
+  <div class="placar-cab">
+    <div><h2 class="placar-tit">Cidades por estado</h2>
+    <p class="nota">Em quantas cidades Lula ou Flávio ganhou mais votos entre o 1º e o 2º turno, e os resultados de cada turno</p></div>
+    <div class="cartoes" id="placar-cartoes"></div>
+  </div>
+  <div class="tab-rolagem"><table class="grande" id="tab-placar"></table></div>
+  <p class="nota" id="placar-nota"></p>
+</section>
+
+<section class="tabela-vis" id="destaques" hidden>
+  <div class="placar-cab">
+    <div><h2 class="placar-tit">Destaques: cidades do PL em estados de direita onde Lula mais ganhou</h2>
+    <p class="nota">Prefeito do PL, vereadores à direita e governador de direita, mas a transferência de votos entre os turnos foi muito maior para Lula que para Flávio e muito maior que em 2022</p></div>
+    <div class="cartoes" id="dest-cartoes"></div>
+  </div>
+  <div class="tab-rolagem"><table class="grande" id="tab-dest"></table></div>
+  <p class="nota" id="dest-nota"></p>
+</section>
+
+<section class="tabela-vis" id="discrepancias" hidden>
+  <div class="placar-cab">
+    <div><h2 class="placar-tit">Discrepâncias: as cidades em que o 2º turno mais mudou desde 2022</h2>
+    <p class="nota">Variação da margem entre os dois candidatos no 2º turno: Lula × Bolsonaro em 2022, Lula × Flávio em 2026</p>
+    <div class="filtros disc-filtros"><label>Mostrar<select id="disc-n"></select></label><label>Mínimo<select id="disc-min"></select></label></div></div>
+    <div class="cartoes" id="disc-cartoes"></div>
+  </div>
+  <div class="tab-rolagem"><table class="grande" id="tab-disc"></table></div>
+  <p class="nota" id="disc-nota"></p>
+</section>
+
+<section class="tabela-vis" id="tabela" hidden>
+  <div class="tab-topo">
+    <nav class="trilha" id="tab-trilha" aria-label="Onde você está"></nav>
+    <input type="search" id="tab-busca" placeholder="Buscar cidade" aria-label="Buscar cidade">
+  </div>
+  <div class="tab-rolagem"><table class="grande" id="tab-grande"></table></div>
+  <p class="nota" id="tab-nota"></p>
+</section>
+
+<dialog id="card-cidade" class="card" aria-labelledby="card-cab">
+  <header class="card-cab" id="card-cab"></header>
+  <div class="card-corpo" id="card-corpo"></div>
+  <footer class="card-rodape">
+    <button type="button" class="link" id="card-mapa">Abrir no mapa</button>
+    <button type="button" class="link" id="card-secoes">Ver as seções</button>
+    <form method="dialog"><button class="link fechar">Fechar</button></form>
+  </footer>
+</dialog>
+
+<dialog id="metodo">
+  <h2>Como ler</h2>
+  <p><b>Votos líquidos</b> de um lugar são os votos que estavam em disputa no 2º turno: os votos do 1º turno em outros candidatos, mais brancos e nulos, mais a variação do comparecimento entre os turnos. É o mesmo que o comparecimento do 2º turno menos os votos que Lula e Flávio já tinham no 1º.</p>
+  <p>No 2º turno esses votos se dividem exatamente em <b>ganho de Lula</b>, <b>ganho de Flávio</b> e <b>brancos e nulos</b>. Um ganho negativo quer dizer que o candidato teve menos votos que no 1º turno.</p>
+  <p><b>Transferência líquida</b> = ganho de Lula − ganho de Flávio, em votos. Positiva (vermelho): a seção transferiu votos para Lula. Negativa (azul): para Flávio. O ranking vai da seção que mais transferiu para Lula até a que mais transferiu para Flávio.</p>
+  <p>A cor de estados e municípios é o saldo a cada 1000 votos líquidos, para comparar lugares de tamanhos diferentes. Os pontos são locais de votação; o tamanho é a transferência somada das seções do local.</p>
+  <p><b>% dos votos decididos para Lula</b> = ganho de Lula ÷ (ganho de Lula + ganho de Flávio): dos votos líquidos que não terminaram em branco ou nulo, quanto foi para Lula. 100% = todos para Lula; 0% = todos para Flávio; acima de 100% = Flávio perdeu votos entre os turnos (e abaixo de 0%, Lula perdeu). Serve para achar lugares onde praticamente todos os votos em disputa foram para um lado, mesmo que muitos tenham virado branco ou nulo. Use um mínimo de votos decididos para não ficar só com lugares minúsculos.</p>
+  <h3>Comparação com 2022</h3>
+  <p>As mesmas contas para o 2º turno de 2022 (Lula × Bolsonaro). Cidades e estados somam todas as seções de 2022. Seções são comparadas com a seção de mesmo número em 2022; o resumo da seção diz se o local também é o mesmo (comparação confiável) ou mudou (comparar com cuidado). Medimos que a seção de mesmo número costuma manter o mesmo eleitorado.</p>
+  <p><b>Categoria</b>: Lula venceu ou perdeu o 2º turno ali em 2022 e em 2026 (Lula em 2022 e 2026; virou para Lula; virou contra Lula; Bolsonaro em 2022 e Flávio em 2026).</p>
+  <h3>Municipais 2024 e posicionamento</h3>
+  <p>Usamos o voto em <b>vereador</b> no 1º turno de 2024 (voto no candidato conta para o partido dele; voto de legenda também), por seção. Dois jeitos de dizer de que lado o lugar vota:</p>
+  <p><b>(a) Índice municipal, pelos dados</b>: cada partido recebe uma nota em cada estado = o Lula 2º turno 2022 médio das seções onde ele teve votos, ponderado pelos votos (partido com menos de 2.000 votos no estado usa a nota nacional). O índice do lugar é a média das notas ponderada pelos votos de vereador: “pelo voto em vereador, o lugar parece X% Lula”. Comparar com o voto real em Lula mostra onde o eleitor separou a política local da nacional. Em cidades e seções o índice é informativo; no estado inteiro ele fica perto do Lula 2022 por construção.</p>
+  <p><b>(b) Blocos fixos</b>: % dos votos de vereador em partidos de esquerda, centro e direita, pela tabela abaixo (classificação editorial, para ajustar).</p>
+  <div class="tab-wrap"><table class="comp"><thead><tr><th>Partido</th><th>Bloco (b)</th><th>Nota nacional (a)</th><th>Votos vereador</th></tr></thead><tbody id="tab-partidos"></tbody></table></div>
+  <p>Também mostramos o prefeito eleito em 2024 (cidade), o partido do prefeito mais votado na seção e o governador eleito em 2022 (estado).</p>
+  <h3>Tabela</h3>
+  <p>Resultado do 1º turno de 2026 em votos: Lula, Flávio, outros candidatos, brancos e nulos e abstenções (as cinco colunas somam o eleitorado). <b>Votos em disputa</b> = outros + brancos e nulos + abstenções do 1º turno: todo eleitor que não votou em Lula nem em Flávio. % Lula e % Flávio do 1º turno são sobre os votos válidos. <b>Ganho</b> = votos no 2º turno − votos no 1º turno; <b>Lula − Flávio</b> = diferença entre os dois ganhos (a transferência líquida). <b>% ganho</b> = ganho ÷ votos em disputa; o que falta para 100% ficou em branco, nulo ou abstenção no 2º turno (a soma pode passar de 100% se o eleitorado de um turno para o outro mudar, e um ganho negativo quer dizer que o candidato perdeu votos). <b>Prefeito</b>: partido do prefeito eleito em 2024 (na linha de estado, do governador eleito em 2026). <b>Vereadores</b>: voto em vereador 2024 por bloco de partidos (tabela abaixo), numa escala de 0 (todo voto em esquerda) a 100 (todo voto em direita), com o centro valendo 50. Clique no cabeçalho para ordenar; clique num estado para ver as cidades e numa cidade para ver o resumo dela.</p>
+  <h3>Destaques</h3>
+  <p>Cidades com prefeito do PL eleito em 2024, vereadores à direita (nota 70 ou mais) e governador de direita eleito em 2022, onde a transferência entre os turnos foi muito maior para Lula que para Flávio (saldo de 30% ou mais dos votos líquidos) e muito maior que em 2022 (pelo menos 60 pontos acima no saldo e 30 pontos acima na fatia do ganho de Lula). Mesmas colunas da Tabela; os cartões somam as cidades da lista.</p>
+  <h3>Discrepâncias</h3>
+  <p>As cidades em que o 2º turno mais mudou de 2022 para 2026. <b>Margem</b> = % de Lula − % do adversário nos votos válidos do 2º turno (Bolsonaro em 2022, Flávio em 2026); <b>variação</b> = margem 2026 − margem 2022, em pontos percentuais: positiva, a cidade foi para o lado de Lula; negativa, para o de Flávio. Mostra as que mais mudaram para cada lado, com as colunas da Tabela e mais as de 2022.</p>
+  <p><b>Base instável</b>: onde o comparecimento caiu no 2º turno, sobram poucos votos líquidos e a escala por 1000 exagera; esses lugares aparecem marcados.</p>
+  <p class="nota">Fontes: arquivos oficiais de votação por seção do TSE (1º turno 04/10/2026 e 2º turno 25/10/2026); coordenadas dos locais de votação do cadastro do TSE (cerca de 1% das seções sem coordenada confiável ficam só no ranking); malha municipal do IBGE; mapa de fundo © OpenStreetMap, © CARTO.</p>
+  <form method="dialog"><button>Fechar</button></form>
+</dialog>
+
+<script src="vendor/leaflet/leaflet.js"></script>
+<script src="app.js?v=20261029140908"></script>
+</body>
+</html>

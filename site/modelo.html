@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Modelo: votos líquidos no 2º turno · 2026</title>
+<meta name="description" content="Para onde os votos líquidos do 2º turno de 2026 iriam pela regra do 1º turno (presidente, governador, senador e deputados), por estado e por cidade, e para onde foram de fato.">
+<link rel="icon" href="icone.svg" type="image/svg+xml">
+<link rel="stylesheet" href="app.css?v=20261029140908">
+<link rel="stylesheet" href="cards.css?v=20261029140908">
+<style>
+.comp { flex: 1; display: flex; flex-direction: column; gap: 12px; padding: 12px 16px 32px; background: var(--painel); }
+.filtros-linha { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: flex-end; }
+.filtros-linha label { display: flex; flex-direction: column; gap: 3px; font-size: 12px; color: var(--muted); }
+.filtros-linha select, .filtros-linha input { font: inherit; font-size: 14px; color: var(--fg); background: var(--bg); border: 1px solid var(--linha); border-radius: 6px; padding: 5px 8px; min-width: 120px; }
+.cartao .v.pos { color: var(--lula); } .cartao .v.neg { color: var(--flavio); }
+table.grande td.pos { color: var(--lula); font-weight: 600; } table.grande td.neg { color: var(--flavio); font-weight: 600; }
+table.grande thead th { cursor: pointer; user-select: none; }
+table.grande thead th:hover { color: var(--fg); text-decoration: underline; }
+table.grande thead th.ord { color: var(--fg); }
+table.grande thead th.ord::after { content: " ▾"; } table.grande thead th.ord.asc::after { content: " ▴"; }
+table.grande td.txt { text-align: left; max-width: 240px; overflow: hidden; text-overflow: ellipsis; }
+.tab-rolagem { overflow: auto; max-height: calc(100vh - 300px); border: 1px solid var(--linha); border-radius: var(--raio); }
+.nota { font-size: 12.5px; color: var(--muted); margin: 0; max-width: 1000px; line-height: 1.45; }
+.modelo-box { border-left: 3px solid var(--flavio); background: var(--bg); padding: 12px 16px; border-radius: 0 var(--raio) var(--raio) 0; font-size: 13.5px; line-height: 1.5; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 28px; align-items: start; }
+.modelo-box p { margin: 0; }
+.modelo-box .texto { display: grid; gap: 8px; min-width: 0; }
+.modelo-box .texto ol { margin: 0; padding-left: 20px; display: grid; gap: 4px; }
+.modelo-box .larga { grid-column: 1 / -1; }
+@media (max-width: 1000px) { .modelo-box { grid-template-columns: 1fr; } }
+table.coef { border-collapse: collapse; font-size: 12.5px; font-variant-numeric: tabular-nums; }
+table.coef th, table.coef td { padding: 3px 10px; text-align: right; border-bottom: 1px solid var(--linha); white-space: nowrap; }
+table.coef th:first-child, table.coef td:first-child { text-align: left; }
+table.coef th { font-size: 11px; color: var(--muted); font-weight: 600; }
+@media (max-width: 860px) { .comp { padding: 10px 12px 28px; } .tab-rolagem { max-height: 70vh; } .topo-acoes { flex-wrap: wrap; } }
+</style>
+</head>
+<body>
+<header class="topo">
+  <div class="marca">
+    <h1>Modelo: votos líquidos no 2º turno</h1>
+    <p>Para onde os votos líquidos iriam pela regra do 1º turno de 2026 (presidente e outros cargos), e para onde foram, por estado e por cidade</p>
+  </div>
+  <div class="topo-acoes">
+    <div class="vis" role="group" aria-label="Visualização"><button type="button" id="vis-estados">Estados</button><button type="button" id="vis-cidades">Cidades</button></div>
+    <a class="link" href="comparativo.html">Presidente × outros cargos</a>
+    <a class="link" href="votos-por-urna.html">Votos por urna</a>
+    <a class="link" href="index.html">Mapa de transferências</a>
+    <button type="button" class="link" id="abrir-metodo">Como ler</button>
+  </div>
+</header>
+
+<main class="comp">
+  <div class="cartoes" id="cartoes"></div>
+  <div class="modelo-box" id="modelo-box"></div>
+  <div class="filtros-linha" id="filtros">
+    <label id="lbl-uf">Estado<select id="sel-uf"></select></label>
+    <label id="lbl-min">Mínimo<select id="sel-min"></select></label>
+    <label id="lbl-n">Mostrar<select id="sel-n"></select></label>
+    <label id="lbl-busca">Buscar<input type="search" id="busca" placeholder="cidade" aria-label="Buscar cidade"></label>
+  </div>
+
+  <section id="sec-estados" hidden>
+    <div class="placar-cab"><h2 class="placar-tit">Estados: previsto × real</h2></div>
+    <div class="tab-rolagem"><table class="grande" id="tab-estados"></table></div>
+    <p class="nota" id="nota-estados"></p>
+  </section>
+
+  <section id="sec-cidades" hidden>
+    <div class="placar-cab"><h2 class="placar-tit" id="tit-cidades">Cidades: previsto × real</h2></div>
+    <div class="tab-rolagem"><table class="grande" id="tab-cidades"></table></div>
+    <p class="nota" id="nota-cidades"></p>
+  </section>
+</main>
+
+<dialog id="card-uf" class="card" aria-labelledby="card-uf-cab">
+  <header class="card-cab" id="card-uf-cab"></header>
+  <div class="card-corpo" id="card-uf-corpo"></div>
+  <footer class="card-rodape" id="card-uf-rodape"></footer>
+</dialog>
+
+<dialog id="metodo">
+  <h2>Como ler</h2>
+  <p><b>Votos líquidos</b> de um lugar = votos dos outros candidatos no 1º turno + queda de brancos e nulos + queda da abstenção entre os turnos (mais a variação dos aptos, quando houve). É igual ao ganho de Lula mais o ganho de Flávio entre os turnos.</p>
+  <h3>O modelo</h3>
+  <p>Só com o 1º turno de 2026: presidente, governador, senador e deputados. Nada do resultado do 2º turno entra, exceto o total de votos líquidos de cada cidade (o tamanho, não a direção).</p>
+  <p><b>Perfil do lugar.</b> Em cada cidade, a proporção em que ela votou: Lula ÷ (Lula + Flávio) para presidente no 1º turno; campo Lula ÷ (campo Lula + campo Flávio) para governador e para senador, com o campo dado pela coligação (PT = campo Lula, PL = campo Flávio); esquerda ÷ (esquerda + direita) para deputado federal e estadual, com o bloco dado pelo partido. Nenhuma dessas proporções vira 0 ou 100: a Bahia entra como 70/30 na presidencial e 56/44 no governo, não como 100/0. Perfil = metade da presidencial + metade da média dos outros cargos.</p>
+  <p><b>Previsão.</b> As entradas (votos dos eliminados; brancos e nulos, abstenção e aptos a menos) são distribuídas pelo perfil; as saídas (brancos e nulos, abstenção ou aptos a mais, que tiram votos dos dois candidatos) são descontadas na proporção do 1º turno entre Lula e Flávio. Ganho previsto de Lula = perfil × entradas + proporção do 1º turno × saídas; o resto é de Flávio. Onde a abstenção subiu mais do que entraram votos (Acre, Amapá, Roraima e 176 cidades), os votos líquidos são negativos e as porcentagens usam as entradas como base. Votos líquidos = outros candidatos no 1º turno + queda de brancos e nulos + queda da abstenção, o mesmo que ganho de Lula + ganho de Flávio. A previsão de um estado é a soma das previsões das suas cidades. A <b>diferença</b> é real − previsto, em votos e em pontos dos votos líquidos. Diferença positiva para Lula = o lugar deu a Lula mais do que o seu próprio perfil no 1º turno sugeria.</p>
+  <p>O peso da presidencial (<code>PESO_PRES</code>) está em <code>modelo_site.py</code>.</p>
+  <form method="dialog"><button>Fechar</button></form>
+</dialog>
+
+<script src="cards.js?v=20261029140908"></script>
+<script src="modelo.js?v=20261029140908"></script>
+</body>
+</html>

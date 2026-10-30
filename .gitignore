@@ -1,0 +1,11 @@
+# dados brutos e derivados grandes (TSE: bweb, parquet, perfil…) — 56 GB, regenerados pelos scripts
+dados/
+.venv/
+logs/
+__pycache__/
+*.pyc
+# CSVs derivados do estudo (100 MB), regeneráveis por scripts/estudo.py
+estudo/ds/vl/
+estudo/ds/mapa/
+.netlify/
+node_modules/
